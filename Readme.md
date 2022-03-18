@@ -78,18 +78,18 @@ For example the added ppa url doesn't match with **lsb_release** version of serv
 E.g:
 1. Debian 11 has lsb_release is **bullseye** and Debian 10 have lsb_release is **buster**. (Run cmd `lsb_release -cs` to get this value)
 2. Check supported plugins ([For example Nginx Certbot plugin for Debian 11](https://debian.pkgs.org/10/debian-main-arm64/python3-certbot-nginx_1.10.1-1_all.deb.html))
-3. You can run this cmd to get a list of installed repository: `grep ^ /etc/apt/sources.list /etc/apt/sources.list.d/*`. For example, if you can see something like so:
+3. You can run this cmd to get a list of installed repositories: `grep ^ /etc/apt/sources.list /etc/apt/sources.list.d/*`. For example:
    ```
    /etc/apt/sources.list.d/certbot-ubuntu-certbot-jammy.list:# deb-src http://ppa.launchpad.net/certbot/certbot/ubuntu jammy main
    /etc/apt/sources.list.d/certbot-ubuntu-certbot-jammy.list.save:# deb-src http://ppa.launchpad.net/certbot/certbot/ubuntu jammy main
    ```
-   In this case, the lsb_release in added ppa is **jammy**. It's incorrect, so you need open the file */etc/apt/sources.list.d/certbot-ubuntu-certbot-jammy.list*, change `deb-src http://ppa.launchpad.net/certbot/certbot/ubuntu jammy main` to `deb-src http://ppa.launchpad.net/certbot/certbot/ubuntu buster main`, and rename the file to `/etc/apt/sources.list.d/certbot-ubuntu-certbot-buster.list`. Do the same thing for the other one.
+   In this case, the lsb_release in added ppa is **jammy**. It's incorrect, so you need to open the file */etc/apt/sources.list.d/certbot-ubuntu-certbot-jammy.list*, change `deb-src http://ppa.launchpad.net/certbot/certbot/ubuntu jammy main` to `deb-src http://ppa.launchpad.net/certbot/certbot/ubuntu buster main`, and rename the file to `/etc/apt/sources.list.d/certbot-ubuntu-certbot-buster.list`. Do the same for the other file.
 
 Now we have a server, Nginx & Certbot installed. It's the time to buy a domain name.
 
 ### Buying a domain name
 
-It's very easy to buy a domain, you can choose any domain name providers our there (AWS Route 53, Namecheap, GoDaddy ..., you name it).
+It's very easy to buy a domain, you can choose any domain name providers out there (AWS Route 53, Namecheap, GoDaddy ..., you name it).
 
 There are some features you need to care when choosing domain name provider:
 - Whether it support payment via Paypal, Square, Stripe, ... (in case you have some issues with Credit, Debit card)
