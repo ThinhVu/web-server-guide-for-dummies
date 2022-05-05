@@ -185,6 +185,8 @@ Docker help you run your apps in containerized environment which is separated fr
 
 To install Docker for debian, run cmd below (ref: [Install docker for Debian in detail](https://docs.docker.com/engine/install/debian/)):
 ```
+curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
 sudo apt-get update
 
 sudo apt-get install \
