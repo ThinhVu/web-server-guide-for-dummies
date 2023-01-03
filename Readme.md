@@ -377,14 +377,15 @@ It's time to play with Nginx.
 
 ### Nginx site-enables configuration
 Example: Create nginx configuration for http://my-site.com which listening on port 8080.
+Consider to using reverse domain name for a config file name. You may find it's a useful trick when you using more than 1 sub domain.
 
 ```
 cd /etc/nginx/site-enables
-vi my-site_com
+vi com.my-site
 ```
 *Note that, there is no rule to name the setting file.*
 
-Copy content to `my-site_com` file:
+Copy content to `com.my-site` file:
 ```
 server {
   server_name my-site.com;
