@@ -203,9 +203,19 @@ registry:2
 ```
 
 ### Setup Docker Registry UI
-To set up Docker registry ui, run cmd below (ref: [docker-registry-ui](https://hub.docker.com/r/joxit/docker-registry-ui)).
 
-Note that you must replace {docker-registry-url} with the url of your docker registry, and {PORT_TO_DOCKER_REGISTRY_UI} to the port you want this service to listen.
+[Recommended] I already hosted a docker registry UI app at https://docker.tvux.me, you can use this app to control your docker repositories and skip steps below.
+
+---
+
+But if you still want to do it by yourself, here the instructions:
+
+1. Using my docker registry UI: https://hub.docker.com/repository/docker/dockerer123456/dru/general
+
+<details>
+ <summary>2. Using joxit's docker registry UI: https://hub.docker.com/r/joxit/docker-registry-ui</summary>
+ 
+ Note that you must replace {docker-registry-url} with the url of your docker registry, and {PORT_TO_DOCKER_REGISTRY_UI} to the port you want this service to listen.
 
 ```
 sudo docker run -d  -p {PORT_TO_DOCKER_REGISTRY_UI}:80 --restart=always \
@@ -240,6 +250,7 @@ sudo docker run -d  -p 5001:80 --restart=always \
    -e REGISTRY_URL=https://registry.my-site.com \
    joxit/docker-registry-ui:latest
 ```
+</details>
 
 ### Build Docker Images from your machine
 
