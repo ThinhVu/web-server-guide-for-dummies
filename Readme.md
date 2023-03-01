@@ -57,25 +57,6 @@ Follow instruction in this website to install latest certbot:
 
 https://certbot.eff.org/instructions
 
-### Setup Certbot Nginx plugin
-Now we already have Nginx and certbot up and running. To generate SSL/TLS, we need to install Certbot plugin for Nginx by run cmd below:
-```
-sudo apt install python-certbot-nginx
-```
-Troubleshoot:
-
-In some situations, you may be unable to install **python-certbot-nginx**.<br/>
-For example the added ppa url doesn't match with **lsb_release** version of server machine. In this case, you need to check and correct it manually.<br/>
-E.g:
-1. Debian 11 has lsb_release is **bullseye** and Debian 10 have lsb_release is **buster**. (Run cmd `lsb_release -cs` to get this value)
-2. Check supported plugins ([For example Nginx Certbot plugin for Debian 11](https://debian.pkgs.org/10/debian-main-arm64/python3-certbot-nginx_1.10.1-1_all.deb.html))
-3. You can run this cmd to get a list of installed repositories: `grep ^ /etc/apt/sources.list /etc/apt/sources.list.d/*`. For example:
-   ```
-   /etc/apt/sources.list.d/certbot-ubuntu-certbot-jammy.list:# deb-src http://ppa.launchpad.net/certbot/certbot/ubuntu jammy main
-   /etc/apt/sources.list.d/certbot-ubuntu-certbot-jammy.list.save:# deb-src http://ppa.launchpad.net/certbot/certbot/ubuntu jammy main
-   ```
-   In this case, the lsb_release in added ppa is **jammy**. It's incorrect, so you need to open the file */etc/apt/sources.list.d/certbot-ubuntu-certbot-jammy.list*, change `deb-src http://ppa.launchpad.net/certbot/certbot/ubuntu jammy main` to `deb-src http://ppa.launchpad.net/certbot/certbot/ubuntu buster main`, and rename the file to `/etc/apt/sources.list.d/certbot-ubuntu-certbot-buster.list`. Do the same for the other file.
-
 Now we have a server, Nginx & Certbot installed. It's the time to buy a domain name.
 
 ### Buying a domain name
