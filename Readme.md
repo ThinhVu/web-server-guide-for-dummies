@@ -53,6 +53,12 @@ Why SSL, TLS certificates?
 
 For better secure for our users. Everyone loves https nowadays, so why not?
 
+Follow instruction in this website to install latest certbot:
+
+https://certbot.eff.org/instructions
+
+If you want to install certbot using ppa, follow below steps (DEPRECATED -> not recommended):
+
 Run cmd below to install certbot (ref: [Setup cerbot](https://haydenjames.io/how-to-set-up-an-nginx-certbot/)).
 ```
 sudo add-apt-repository ppa:certbot/certbot
