@@ -4,8 +4,8 @@
 
 ```
 OS: >= Debian 10
-RAM: >= 2GB
-Storage: >= 40GB
+RAM: >= 1GB
+Storage: >= 10GB
 ```
 
 Why Debian?
@@ -14,10 +14,10 @@ Why Debian?
 - It's just a matter of choice.
 - Nothing more.
 
-Why 2GB RAM? It's even less memory than my stupid phone.
+Why 1GB RAM? It's even less memory than my stupid phone.
 - It's enough to run a lot of things, and enough to build things too. Remember? With 4KB of RAM, people can send someone to the moon.
 
-Why 40GB storage? It's less storage than my stupid phone.
+Why 10GB storage? It's less storage than my stupid phone.
 - Yes. But it's the minimum storage option for almost VPS service provider nowadays. With this, we can install applications, install another stuff, and the database too.
 
 WIth these requirements, you may need to pay about $6 - 8$/month for purchasing the service. You can use it for learning purpose or even for production too.
