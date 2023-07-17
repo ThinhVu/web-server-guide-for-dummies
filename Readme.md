@@ -20,7 +20,7 @@ Why 1GB RAM? It's even less memory than my stupid phone.
 Why 10GB storage? It's less storage than my stupid phone.
 - Yes. But it's the minimum storage option for almost VPS service provider nowadays. With this, we can install applications, install another stuff, and the database too.
 
-WIth these requirements, you may need to pay about $6 - 8$/month for purchasing the service. You can use it for learning purpose or even for production too.
+With these requirements, you may need to pay about $6 - 8$/month for purchasing the service. You can use it for learning purpose or even for production too. If you using the VPS for short time, considering using some cloud VPS which cost you by the hours of usage (Digital Ocean, Vultr, AWS EC2 etc, ...)
 
 ## Setup
 
