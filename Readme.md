@@ -57,6 +57,13 @@ Follow instruction in this website to install latest certbot:
 
 https://certbot.eff.org/instructions
 
+```
+apt install snapd
+snap install core
+snap install --classic certbot
+ln -s /snap/bin/certbot /usr/bin/certbot
+```
+
 Now we have a server, Nginx & Certbot installed. It's the time to buy a domain name.
 
 ### Buying a domain name
