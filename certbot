@@ -3,3 +3,66 @@ Certbot
 https://chat.openai.com/share/05e0137f-3581-413f-885b-c83d8a168672
 
 https://chat.openai.com/share/ae7b69a3-de90-4c95-8624-fa0768dbd841
+
+[Vi]
+Để tạo reverse proxy thì mình dùng NginX, một số web server khác có thể dùng như Apache, Traffik, Caddy.
+
+Để tạo chứng chỉ bảo mật thì mình dùng LetsEncrypt vì họ cung cấp dịch vụ miễn phí. Nhược điểm của LetsEncrypt là chứng chỉ bảo mật sẽ hết hạn trong 3 tháng. Sau đó sẽ phải xin cấp chứng chỉ mới.
+
+Làm như vậy với 1 domain thì không sao, chứ làm cho nhiều domain thì rất mất công. Vì vậy mình dùng thêm phần mềm certbot. Phần mềm này có tác dụng tự xin lại chứng chỉ nên một lần cài đặt là coi như dùng mãi mãi.
+
+Ngày trước khi làm mấy dịch vụ đơn giản, ứng dụng chỉ chạy ở 1 máy chủ duy nhất thì mình dùng certbot kèm NginX. Muốn xin chứng chỉ cho domain cụ thể nào đó thì chỉ cần đúng 1 câu lệnh là xong.
+
+Ví dụ: "certbot --nginx -d {domain}"
+
+Câu lệnh này sẽ tạo chứng chỉ bảo mật cho {domain} thông qua việc thực thi `http01 challenge`theo các bước sau:
+1. Lets Encrypt tạo token file `.well-known/acme-challenge/token`.
+2. Issue một http GET request đến `{domain}/.well-known/acme-challenge/token`.
+3. Nếu response từ http GET request kia khớp với nội dung trong token file thì coi như là domain đó chính là domain của bạn. Chứng chỉ bảo mật sẽ được cấp và lưu tại `/etc/letsencrypt/live/{domain}/fullkey.pem`, .... 
+4. Sửa NginX config để cập nhật SSL certificates cũng như redirect http method ở cổng 80 về https ở cổng 443.
+
+Rất đơn giản.
+
+Tuy nhiên, để phục vụ việc horizontal scaling & đáp ứng được SLA đủ cao, mình cần phải cài đặt dịch vụ ở nhiều máy chủ khác nhau và làm load balancing (cân bằng tải).
+
+Load balancing có thể hiểu là việc chia nhỏ một khối lượng lớn công việc (ở đây là http request) và chia về cho từng người xử lý (người ở đây là từng server).
+
+Load balancing thì có nhiều cách và phổ biến nhất là sử dụng dịch vụ của mấy provider như Amazon Web Service (AWS) hay Cloudflare.
+
+Theo như mình biết thì AWS có vài gói Load balancing (L4, L7) muốn cài AWS Load Balancer thì phải cài AWS VPC, EC2, API Gateway gì đó, cài mấy cái đó thì mất tiền.
+
+Bên Cloudflare thì DNS proxied miễn phí nhưng với volume ở mức nào đó (họ không ghi rõ phần này, khi nào dùng quá thì họ gửi email bảo mình cập nhật pricing plan và đóng tiền). Nói chung là cũng phải mua một gói license. Túm lại là nếu sử dụng dịch vụ load balancer mà các dịch vụ kia cung cấp thì sẽ phải tốn tiền, có thể là rất nhiều tiền. (Nhưng nếu bạn muốn thì cứ ưu tiên Cloudflare vì nó là số 1 thế giới về vụ này rồi).
+
+***Một lý do khác mà mình không muốn dùng dịch vụ trả phí là khi bị DDOS, nếu không xử lý khéo thì có thể bay ngay vài chục triệu trong một giờ.***
+
+Cho nên mình ưu tiên cách mà nó không tốn một xu nào đó là tận dùng DNS weighted hoặc geolocation routing làm load balancer. 
+
+DNS weighted routing có thể cài trên cả AWS Route 53 hoặc Cloudflare DNS setting. Ở AWS thì phải mất một ít phí ($0.5/tháng cho hosted zone) nhưng nó cho phép tuỳ biến routing tốt hơn (custom weighted, custom geolocation) còn Cloudflare DNS thì không mất xu nào nhưng khả năng tuỳ biến ít hơn.
+
+*Đương nhiên mua gói mất tiền của Cloudflare thì lại thoải mái*
+
+DNS routing đã xong, giờ lại phát sinh vấn đề xin chứng chỉ cho domain.
+
+DNS loadbancing có thể hiểu đơn giản là 1 domain bây giờ không chỉ trỏ đến 1 máy chủ nữa mà giờ nó sẽ chọn một trong N máy chủ mà bạn cài.
+
+Ví dụ trước kia mình map địa chỉ `blog.vuxify.com` đến địa chỉ IP `104.100.1.12` thì lần nào vào domain kia, request đều được chuyển hướng đến `104.100.1.12`.
+
+Bây giờ làm load balancing cho domain bên trên vào 2 máy với IP:  `104.100.1.12` và `104.100.1.13` thì khi request được gửi đến domain `blog.vuxify.com`, nó sẽ được chuyển hướng đến 1 trong 2 IP bên trên.
+
+Vậy nó gây ra khó khăn gì khi xin chứng chỉ bảo mật. Bạn có thể nhìn lại cơ chế xin chứng chỉ bảo mật mặc định ở 4 step bên trên.
+
+Ở bước 2, LetsEncrypt sẽ issue một request đến `{domain}/.well-known/acme-challenge/token`. Lúc này DNS routing sẽ trỏ request đến một IP ngẫu nhiên cho nên khi đó sẽ xảy ra 2 trường hợp. Nếu may mắn, IP được trỏ vào đúng với IP của máy đang xin chứng chỉ bảo mật. Ngược lại, IP được trỏ vào là IP máy còn lại thì việc xin chứng chỉ bảo mật bị thất bại.
+
+Tỉ lệ thất bại này sẽ càng tăng khi có càng nhiều máy chủ. Ví dụ nếu có 2 máy chủ và tỉ lệ weighted routing là như nhau thì tỉ lệ fail là 50%. Nếu có 10 máy chủ thì tỉ lệ fail là 90%. Có 100 máy chủ thì tỉ lệ fail là 99%. Để tăng tỉ lệ thành công thì có 1 cách là điều chỉnh tỉ lệ weighted routing 100% trỏ vào máy cần xin chứng chỉ. Xin xong thì lại điều chỉnh lại. Nhưng mà làm thế thì quá mất công. Cơ bản là không thể dùng cách này.
+
+Vì vậy phải dùng một cơ chế xác thực khác, thay vì dùng http01 thì mình sẽ dùng dns01. Với cơ chế này, LetsEncrypt không gửi http get request đến `{domain}/.well-known/acme-challenge/token` mà nó sẽ:
+1. tạo một token gửi cho bạn
+2. bạn thêm TXT record của {domain} cần xin chứng chỉ với nội dung token LetsEncrypt vừa tạo bên trên
+3. LetsEncrypt xác thực bằng cách đọc TXT record của {domain}
+4. Tạo chứng chỉ.
+
+Cách này đơn giản hơn vì mình chỉ cần thêm TXT record vào domain, xác thực xong thì xoá đi luôn.
+
+Để khâu này làm tự động, mình cần tạo AWS IAM, cấp quyền FullAccessAWSRoute53, sau đó lấy `access key id` và `secret access key`, cài aws cli trên mỗi máy chủ rồi login vào aws cli bằng thông tin bên trên, sau đó cài thêm plugin dns-route53 plugin cho certbot.
+
+Từ giờ mỗi khi cần xin chứng chỉ, certbot sẽ tự tạo token, tự cập nhật TXT record trên AWS route 53, tự verify và xoá TXT record vừa tạo kia đi.
