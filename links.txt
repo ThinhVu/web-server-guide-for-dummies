@@ -1,0 +1,5 @@
+https://api7.ai/learning-center/openresty/performance-testing-tool-wrk?fbclid=IwAR2xSEtKSQ-kbWpPsrL1YkBc6tuUVH6j4QsRa4QxVTMB1Na1KBE6k7GFUkA
+
+https://phoenixnap.com/kb/ulimit-linux-command
+
+https://www.nginx.com/blog/avoiding-top-10-nginx-configuration-mistakes/#:~:text=The%20worker_connections%20directive%20sets%20the,(the%20default%20is%20512).
