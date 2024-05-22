@@ -70,6 +70,17 @@ server {
 }
 ```
 
+### Connection consistent
+
+```
+upstream backend {
+ hash $binary_remote_addr consistent;
+ server localhost:5000;
+ server localhost:5001;
+ server localhost:5002;
+}
+```
+
 ## Inspect request IP address
 **/etc/nginx/sites-enabled/tvux.me**
 ```
