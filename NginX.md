@@ -138,6 +138,17 @@ http {
 }
 ```
 
+## Enable socket connection upgrade
+
+```
+http {
+  map $http_upgrade $connection_upgrade {
+    default upgrade;
+    '' close;
+  }
+}
+```
+
 ## Read access log
 ```
 cat /var/log/nginx/access.log
