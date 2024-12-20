@@ -196,7 +196,7 @@ registry:2
 
 ### Setup Docker Registry UI
 
-[Recommended] I already hosted a docker registry UI app at https://docker.tvux.me, you can use this app to control your docker repositories and skip steps below.
+[Recommended] I already hosted a docker registry UI app at https://docker.vuxify.com, you can use this app to control your docker repositories and skip steps below.
 
 ---
 
