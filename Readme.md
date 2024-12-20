@@ -118,7 +118,7 @@ sudo snap install docker
 
 ### Setup Private Docker Registry
 
-Hosting our private docker registry may be "the best" practice for production. If you want to using public Docker images, skip this section & a section below.
+You can host your docker image at docker hub - which is public for everyone. But in case if you want to keep your docker image privately, there are 2 options you should consider. One is using a service like AWS ECR, the other is self hosting. The following guide help you hosting your our private registry.
 
 The cmd below will create basic authentication from {username} and {password} and store it in **registry-config/htpasswd** file - which will be used as Docker private registry user. Note that, you must replace {username} and {password} with the account you want to access the private registry.
 ```
